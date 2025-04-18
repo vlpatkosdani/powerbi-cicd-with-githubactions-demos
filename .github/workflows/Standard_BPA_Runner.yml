@@ -69,7 +69,7 @@ jobs:
       - name: Run Tabular Editor and the BPA against your semantic model
        # Execute the BPA using command-line arguments
         run: |
-          ./TabularEditor.exe "Contoso 10k.SemanticModel/definition/database.tmdl" -A "https://raw.githubusercontent.com/TabularEditor/BestPracticeRules/master/BPARules-PowerBI.json" `
+          ./TabularEditor.exe "Contoso 10k.SemanticModel/definition/database.tmdl" -A "BPA_Rule.json" `
           | Tee-Object -FilePath "./BPA_output.txt" 
           
       - name: Upload BPA result into a .txt file
