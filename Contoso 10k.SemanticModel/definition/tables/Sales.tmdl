@@ -31,6 +31,11 @@ table Sales
 
 		changedProperty = FormatString
 
+	measure 'Division not following BP' = [Margin] / [Total Cost]
+		lineageTag: 39efd106-511a-4d63-9a49-e7cd51ee763f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column 'Order Number'
 		dataType: int64
 		isHidden
