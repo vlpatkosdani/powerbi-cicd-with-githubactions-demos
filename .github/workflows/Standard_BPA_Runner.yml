@@ -1,0 +1,80 @@
+name: Get URL and Install Tabular Editor 2.x and Run the BPA
+
+# Trigger this workflow manually via GitHub Actions UI
+on:
+  workflow_dispatch:
+
+jobs:
+  # First job: Retrieve the latest download URL for Tabular Editor 2.x
+  Get_download_URL_for_Tabular_Editor:
+    runs-on: ubuntu-latest
+    outputs:
+      download_url: ${{ steps.get_url.outputs.DOWNLOAD_URL }}
+
+    steps:
+      - name: Try to open the URL and extract the download link
+        id: get_url
+        run: |
+          # URL of the latest release page
+          url="https://github.com/TabularEditor/TabularEditor/releases/latest"
+          
+          # Follow redirects to get the effective release URL
+          response_url=$(curl -Ls -o /dev/null -w %{url_effective} $url || echo "failed")
+          
+          if [ "$response_url" = "failed" ]; then
+            echo "Failed to get the response URL."
+            exit 1
+          else
+            echo "Response URL: $response_url"
+            
+            # Extract version number from URL (e.g., tag/2.25.0)
+            if [[ $response_url =~ tag\/([0-9]+\.[0-9]+(\.[0-9]+)?) ]]; then
+              version="${BASH_REMATCH[1]}"
+              
+              # Normalize version format if necessary (e.g., 2.25 → 2.25.0)
+              if [[ $version =~ ^[0-9]+\.[0-9]+$ ]]; then
+                version="${version}.0"
+              fi
+              
+              echo "Extracted version: $version"
+              
+              # Construct the direct download link
+              download_url="https://cdn.tabulareditor.com/files/TabularEditor.${version}.zip"
+              echo "Download URL: $download_url"
+              
+              # Make the download URL available to downstream jobs
+              echo "DOWNLOAD_URL=$download_url" >> $GITHUB_OUTPUT
+            else
+              echo "Failed to extract the version number from the response URL."
+              exit 1
+            fi
+          fi
+        shell: bash
+
+  # Second job: Download, extract and run Tabular Editor with BPA
+  Install_TabularEditor_and_run_BPA:
+    needs: Get_download_URL_for_Tabular_Editor
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Ensures source code is available
+
+      - name: Install Tabular Editor
+        # Download the Tabular Editor zip using the URL from the previous job
+        run: |
+          curl -L ${{ needs.Get_download_URL_for_Tabular_Editor.outputs.download_url }} -o TabularEditor.zip
+          unzip TabularEditor.zip
+                 
+      - name: Run Tabular Editor and the BPA against your semantic model
+       # Execute the BPA using command-line arguments
+        run: |
+          ./TabularEditor.exe "Contoso 10k.SemanticModel/definition/database.tmdl" -A "BPA_Rule.json" `
+          | Tee-Object -FilePath "./BPA_output.txt" 
+          
+      - name: Upload BPA result into a .txt file
+        uses: actions/upload-artifact@v4
+        with:
+          name: BPA_Result
+          path: ./BPA_output.txt
+          if-no-files-found: error

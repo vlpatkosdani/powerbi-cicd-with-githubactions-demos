@@ -1,0 +1,12 @@
+[
+  {
+    "ID": "DAX_DIVISION_COLUMNS",
+    "Name": "Avoid division (use DIVIDE function instead)",
+    "Category": "DAX Expressions",
+    "Description": "Calculated Columns, Measures or Calculated Tables should not use the division symbol in their expressions (/) unless the denominator is a constant value. Instead, it is advised to always use the DIVIDE(<numerator>,<denominator>) function.",
+    "Severity": 2,
+    "Scope": "Measure, CalculatedColumn, CalculatedTable",
+    "Expression": "Tokenize().Any(\n    Type = DIV and\n    Next.Type <> INTEGER_LITERAL and\n    Next.Type <> REAL_LITERAL\n)",
+    "CompatibilityLevel": 1200
+  }
+]
