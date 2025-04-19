@@ -15,8 +15,8 @@ Each branch represents a different scenario with growing complexity and value �
 
 | Status | Scenario | Branch | Description |
 |--------|----------|--------|-------------|
-| ✅ | Basic Scenario 1 – Default BPA Ruleset | [`basic-scenario-1-default-bpa-rules`]([https://github.com/your-org/your-repo/tree/basic-scenario-1-default-bpa-rules](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-1-default-bpa-ruleset)) | Run BPA using the default ruleset by referencing its URL from Tabular Editor’s GitHub repo |
-| ✅ | Basic Scenario 2 – Custom BPA Ruleset | [`basic-scenario-2-custom-bpa-rules`]([https://github.com/your-org/your-repo/tree/basic-scenario-2-custom-bpa-rules](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset)) | Use a local JSON file with a custom BPA rule |
+| ✅ | Basic Scenario 1 – Default BPA Ruleset | [`basic-scenario-1-default-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-1-default-bpa-ruleset) | Run BPA using the default ruleset by referencing its URL from Tabular Editor’s GitHub repo |
+| ✅ | Basic Scenario 2 – Custom BPA Ruleset | [`basic-scenario-2-custom-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset) | Use a local JSON file with a custom BPA rule |
 | ⏳ | Intermediate Scenario 1 – BPA with result analysis | _coming soon_ | Parse and handle BPA output programmatically |
 | ⏳ | Advanced Scenario 1 – Full CI/CD Workflow | _coming soon_ | Combine validations, PR checks, formatting, and more |
 
@@ -38,8 +38,8 @@ Each branch represents a different scenario with growing complexity and value �
 
 | Article | Branch |
 |---------|--------|
-| ✅ [Part 1 – Run BPA with default ruleset](#) | `basic-scenario-1-default-bpa-rules` |
-| ✅ [Part 2 – Use a custom BPA rule](#) | `basic-scenario-2-custom-bpa-rules` |
+| ✅ [Part 1 – Run BPA with default ruleset](https://fabricatedinsights.substack.com/i/160480588/step-a-create-your-first-github-actions-workflow) | [`basic-scenario-1-default-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-1-default-bpa-ruleset) |
+| ✅ [Part 2 – Use a custom BPA rule](https://fabricatedinsights.substack.com/i/160480588/step-b-modify-your-first-github-actions-workflow) | [`basic-scenario-2-custom-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset) |
 | ⏳ Part 3 – Analyze and interpret BPA output | _coming soon_ |
 | ⏳ Part 4 – Pull request validation with GitHub Actions | _coming soon_ |
 | ⏳ Part 5 – Full Power BI CI/CD pipeline | _coming soon_ |
