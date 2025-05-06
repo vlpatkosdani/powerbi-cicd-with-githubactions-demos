@@ -1,0 +1,102 @@
+[
+    {
+        "ID": "1_DAX_TODO",
+        "Name": "Revisit TODO expressions",
+        "Category": "DAX Expressions",
+        "Description": "Objects with an expression containing the word \"TODO\" (typically as a comment), should most likely be revisited.",
+        "Severity": 1,
+        "Scope": "Measure, Partition, CalculatedColumn, CalculatedTable",
+        "Expression": "RegEx.IsMatch(Expression, \"(?i)(TODO|TBC|TBD|!!)\")",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "2_PROVIDE_FORMAT_STRING_FOR_MEASURES",
+        "Name": "[Formatting] Provide format string for measures",
+        "Category": "Formatting",
+        "Description": "Visible measures should have their format string property assigned",
+        "Severity": 3,
+        "Scope": "Measure",
+        "Expression": "not IsHidden and not Table.IsHidden and string.IsNullOrWhitespace(FormatString)",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "3_LARGE_TABLES_SHOULD_BE_PARTITIONED",
+        "Name": "[Performance] Large tables should be partitioned",
+        "Category": "Performance",
+        "Description": "Large tables should be partitioned in order to optimize processing. In order for this rule to run properly, you must run the script shown here: https://www.elegantbi.com/post/vertipaqintabulareditor",
+        "Severity": 2,
+        "Scope": "Table",
+        "Expression": "Convert.ToInt64(GetAnnotation(\"Vertipaq_RowCount\")) > 25000000 and Partitions.Count = 1",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "4_AVOID_STRUCTURED_DATA_SOURCES_WITH_PROVIDER_PARTITIONS",
+        "Name": "[Error Prevention] Avoid structured data sources with provider partitions",
+        "Category": "Error Prevention",
+        "Description": "Power BI does not support provider (a.k.a. 'legacy') partitions which reference structured data sources. Partitions which reference structured data sources must use the M-language. Otherwise, 'provider' partitions must reference a 'provider' data source. This can be resolved by converting the structured data source into a provider data source (see 2nd reference link below). Reference: https://docs.microsoft.com/power-bi/admin/service-premium-connect-tools#data-source-declaration Reference: https://www.elegantbi.com/post/convertdatasources",
+        "Severity": 2,
+        "Scope": "Partition",
+        "Expression": "SourceType == \"Query\" and DataSource.Type == \"Structured\"",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "5_USE_THE_TREATAS_FUNCTION_INSTEAD_OF_INTERSECT",
+        "Name": "[DAX Expressions] Use the TREATAS function instead of INTERSECT for virtual relationships",
+        "Category": "DAX Expressions",
+        "Description": "The TREATAS function is more efficient and provides better performance than the INTERSECT function when used in virutal relationships. Reference: https://www.sqlbi.com/articles/propagate-filters-using-treatas-in-dax/",
+        "Severity": 2,
+        "Scope": "Measure, CalculationItem",
+        "Expression": "RegEx.IsMatch(Expression,\"(?i)INTERSECT\\s*\\(\")",
+        "CompatibilityLevel": 1400
+    },
+    {
+        "ID": "6_PERSPECTIVES_WITH_NO_OBJECTS",
+        "Name": "[Maintenance] Perspectives with no objects",
+        "Category": "Maintenance",
+        "Description": "Perspectives that contain no objects (tables) are most likely not necessary. In this rule, it is only necessary to check tables as adding a column/measure/hierarchy to a perspective also adds the table to the perspective. Additionally, tables in general covers calculated tables and calculation groups as well.",
+        "Severity": 1,
+        "Scope": "Perspective",
+        "Expression": "Model.Tables.Any(InPerspective[current.Name]) == false",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "7_TRANSLATE_OTHER_NAMES",
+        "Name": "Translate Perspectives",
+        "Category": "Model Layout",
+        "Description": "When the model contains one or more cultures, the model object and any perspectives in the model should have a translated name assigned in all cultures.",
+        "Severity": 1,
+        "Scope": "Model, Perspective",
+        "Expression": "Model.Cultures.Any(string.IsNullOrEmpty(outerIt.TranslatedNames[it]))",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "8_LAYOUT_ADD_TO_PERSPECTIVES",
+        "Name": "Add objects to perspectives",
+        "Category": "Model Layout",
+        "Description": "Visible tables, columns, measures and hierarchies should be assigned to at least one perspective, if the Tabular Model uses perspectives. Otherwise, the objects will only be visible when connecting directly to the model.",
+        "Severity": 1,
+        "Scope": "Table, Measure, Hierarchy, DataColumn, CalculatedColumn, CalculatedTableColumn",
+        "Expression": "IsVisible and Model.Perspectives.Any() and not InPerspective.Any(it)",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "9_REMOVE_DATA_SOURCES_NOT_REFERENCED_BY_ANY_PARTITIONS",
+        "Name": "[Maintenance] Remove data sources not referenced by any partitions",
+        "Category": "Maintenance",
+        "Description": "Data sources which are not referenced by any partitions may be removed.",
+        "Severity": 1,
+        "Scope": "ProviderDataSource, StructuredDataSource",
+        "Expression": "UsedByPartitions.Count() == 0 and not Model.Tables.Any(SourceExpression.Contains(OuterIt.Name)) and not Model.AllPartitions.Any(Query.Contains(OuterIt.Name))",
+        "CompatibilityLevel": 1200
+    },
+    {
+        "ID": "10_MODEL_USING_DIRECT_QUERY_AND_NO_AGGREGATIONS",
+        "Name": "[Performance] Consider using aggregations if using Direct Query in Power BI",
+        "Category": "Performance",
+        "Description": "If using Direct Query in Power BI Premium, you may want to consider using aggregations in order to boost performance. Reference: https://docs.microsoft.com/power-bi/transform-model/desktop-aggregations",
+        "Severity": 1,
+        "Scope": "Model",
+        "Expression": "Tables.Any(ObjectTypeName == \"Table (DirectQuery)\") and AllColumns.Any(AlternateOf != null) == false and DefaultPowerBIDataSourceVersion.ToString() == \"PowerBI_V3\"",
+        "CompatibilityLevel": 1200
+    }
+  ]

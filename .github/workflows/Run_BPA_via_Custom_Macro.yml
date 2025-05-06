@@ -1,0 +1,50 @@
+name: Get TE2 URL and run BPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Get_Latest_TabularEditor2_Download_Link:
+    runs-on: ubuntu-latest
+    outputs:
+      download_url: ${{ steps.get_url.outputs.DOWNLOAD_URL }}
+    steps:
+      - name: Get latest release using GitHub API
+        id: get_url
+        run: |
+          release_info=$(curl -s https://api.github.com/repos/TabularEditor/TabularEditor/releases/latest)
+          version=$(echo "$release_info" | jq -r '.tag_name' | sed 's/^v//')
+          if [[ $version =~ ^[0-9]+\.[0-9]+$ ]]; then
+            version="${version}.0"
+          fi
+          download_url="https://cdn.tabulareditor.com/files/TabularEditor.${version}.zip"
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" $download_url)
+          if [[ "$status_code" -ne 200 ]]; then
+            echo "Error: Download URL returned status code $status_code"
+            exit 1
+          fi
+          echo "DOWNLOAD_URL=$download_url" >> $GITHUB_OUTPUT
+        shell: bash
+
+  BPA:
+    needs: Get_Latest_TabularEditor2_Download_Link
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Install Tabular Editor
+        run: |
+          curl -L ${{ needs.Get_Latest_TabularEditor2_Download_Link.outputs.download_url }} -o TabularEditor.zip
+          mkdir -p TabularEditor
+          unzip TabularEditor.zip -d TabularEditor
+      - name: Run BPA Test Script
+        run: |
+          .\TabularEditor\TabularEditor.exe ".\Contoso 10k.SemanticModel\definition\database.tmdl" -S ".\Custom_TA_Macro_for_BPA.csx"
+        shell: cmd
+
+      - name: Upload BPA CSV Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: BPA-CSV-Result
+          path: BPA_Results.csv
