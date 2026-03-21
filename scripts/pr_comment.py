@@ -37,7 +37,7 @@ def format_violations(df, expanded=True):
     for rule, group in grouped:
         objects = group[['ObjectName', 'ObjectType']].dropna().drop_duplicates().values.tolist()
         anchor = get_anchor(rule)
-        rule_link = f"https://github.com/VisualLabs-Kft/visuallabs-bi-internal-PullRequest-checker/blob/main/scripts/bpa_rules.md#{anchor}"
+        rule_link = f"https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/blob/advanced-scenario-1-bpa-analysis-with-pr-comment/bpa_rules.md#{anchor}"
 
         output.append(
             f"<details{' open' if expanded else ''}>\n"
