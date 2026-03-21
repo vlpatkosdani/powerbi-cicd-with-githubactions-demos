@@ -31,7 +31,7 @@ table Sales
 
 		changedProperty = FormatString
 
-	measure 'Division not following BP' = [Margin] / [Total Cost]
+	measure 'Division not following BPA rules' = [Margin] / [Total Cost]
 		lineageTag: 39efd106-511a-4d63-9a49-e7cd51ee763f
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
