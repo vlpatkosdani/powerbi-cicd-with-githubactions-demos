@@ -1,0 +1,108 @@
+name: Get TE2 URL and run BPA
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+
+
+jobs:
+  Get_Latest_TabularEditor2_Download_Link:
+    runs-on: ubuntu-latest
+    outputs:
+      download_url: ${{ steps.get_url.outputs.DOWNLOAD_URL }}
+    steps:
+      - name: Get latest release using GitHub API
+        id: get_url
+        run: |
+          release_info=$(curl -s https://api.github.com/repos/TabularEditor/TabularEditor/releases/latest)
+          version=$(echo "$release_info" | jq -r '.tag_name' | sed 's/^v//')
+          if [[ $version =~ ^[0-9]+\.[0-9]+$ ]]; then
+            version="${version}.0"
+          fi
+          download_url="https://cdn.tabulareditor.com/files/TabularEditor.${version}.zip"
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" $download_url)
+          if [[ "$status_code" -ne 200 ]]; then
+            echo "Error: Download URL returned status code $status_code"
+            exit 1
+          fi
+          echo "DOWNLOAD_URL=$download_url" >> $GITHUB_OUTPUT
+        shell: bash
+
+  BPA:
+    needs: Get_Latest_TabularEditor2_Download_Link
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Checkout main branch scripts
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          path: main_branch_scripts
+
+
+      - name: Install Tabular Editor
+        run: |
+          curl -L ${{ needs.Get_Latest_TabularEditor2_Download_Link.outputs.download_url }} -o TabularEditor.zip
+          mkdir -p TabularEditor
+          unzip TabularEditor.zip -d TabularEditor
+
+      - name: Set prefix variable (CET timezone)
+        run: |
+          export TZ="Europe/Budapest"
+          echo "PREFIX=$(date +'%Y%m%d-%H%M')-${{ github.repository }}-${{ github.head_ref || github.ref_name }}" | sed 's/\//-/g' >> $GITHUB_ENV
+        shell: bash
+
+      - name: Run BPA Test Script
+        run: |
+          .\TabularEditor\TabularEditor.exe ".\Contoso 10k.SemanticModel\definition\database.tmdl" -S ".\main_branch_scripts\scripts\Custom_TA_Macro_for_BPA.csx"
+        shell: cmd
+
+      - name: Upload BPA CSV Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PREFIX }}_BPA-CSV-Result
+          path: BPA_Results.csv
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'  
+
+      - name: Install Python dependencies
+        run: pip install pandas requests tabulate
+
+      - name: Run BPA result analysis
+        run: python main_branch_scripts/scripts/bpa_result_analysis.py
+
+
+      - name: Upload Python Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PREFIX }}_Python-Artifacts
+          path: |
+            must_correct.csv
+            correct_asap.csv
+            nice_to_have.csv
+
+      - name: Comment on Pull Request
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          python main_branch_scripts/scripts/pr_comment.py 
+
+      - name: Fail if Severity 3 issues found
+        if: env.SEVERITY_3_FOUND == 'true'
+        run: |
+          echo " Model cannot be deployed because Severity 3 issues were found."
+          exit 1
