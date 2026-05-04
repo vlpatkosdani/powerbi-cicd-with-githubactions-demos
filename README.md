@@ -43,7 +43,7 @@ Each branch represents a different scenario with growing complexity and value �
 | ✅ [Part 1 – Use a custom BPA rule](https://fabricatedinsights.substack.com/i/160480588/step-b-modify-your-first-github-actions-workflow) | [`basic-scenario-2-custom-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset) |
 | ✅ [Part 2 – Automating BPA with C# in Tabular Editor + GitHub Actions](https://fabricatedinsights.substack.com/p/automating-bpa-with-c-in-tabular) | [`intermediate-scenario-1-bpa-macro-csharp`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/intermediate-scenario-1-bpa-macro-csharp) |
 | ✅ [Part 3 – Making BPA Results Actionable with Automated PR Comments](https://fabricatedinsights.substack.com/p/making-bpa-results-actionable-with) | [`advanced-scenario-1-bpa-analysis-pr-comments`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-1-bpa-analysis-pr-comments) |
-| ✅ [Part 4 – Scaling Your CI/CD Pipeline Across Projects](link-to-part4) | [`advanced-scenario-2-central-repo`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-2-central-repo-setup) |
+| ✅ [Part 4 – Scaling Your CI/CD Pipeline Across Projects](https://fabricatedinsights.substack.com/p/scaling-your-power-bi-cicd-pipeline?r=2pu5jb) | [`advanced-scenario-2-central-repo`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-2-central-repo-setup) |
 
 ---
 
