@@ -15,10 +15,11 @@ Each branch represents a different scenario with growing complexity and value �
 
 | Status | Scenario | Branch | Description |
 |--------|----------|--------|-------------|
-| ✅ | Basic Scenario 1 – Default BPA Ruleset | [`basic-scenario-1-default-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-1-default-bpa-ruleset) | Run BPA using the default ruleset by referencing its URL from Tabular Editor’s GitHub repo |
+| ✅ | Basic Scenario 1 – Default BPA Ruleset | [`basic-scenario-1-default-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-1-default-bpa-ruleset) | Run BPA using the default ruleset by referencing its URL from Tabular Editor's GitHub repo |
 | ✅ | Basic Scenario 2 – Custom BPA Ruleset | [`basic-scenario-2-custom-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset) | Use a local JSON file with a custom BPA rule |
 | ✅ | Intermediate Scenario 1 – BPA via C# Macro with Consolidated Output | [`intermediate-scenario-1-bpa-macro-csharp`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/intermediate-scenario-1-bpa-macro-csharp) | Run BPA with a custom C# script to consolidate results into a CSV and support full custom rulesets |
-| ⏳ | Advanced Scenario 1 – Full CI/CD Workflow | _coming soon_ | Combine validations, PR checks, formatting, and more |
+| ✅ | Advanced Scenario 1 – Automated BPA Analysis with PR Comments | [`advanced-scenario-1-bpa-analysis-pr-comments`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-1-bpa-analysis-pr-comments) | Analyze BPA results with Python and post structured comments directly on pull requests |
+| ✅ | Advanced Scenario 2 – Scaling with Central Repository | [`advanced-scenario-2-central-repo`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-2-central-repo) | Set up a central repository for reusable workflows and scripts that can be called from multiple project repositories |
 
 ---
 
@@ -30,7 +31,7 @@ Each branch represents a different scenario with growing complexity and value �
 |---------|-------------|
 | ✅ [From Version Chaos to CI/CD – Power BI Version Control with GitHub](https://fabricatedinsights.substack.com/p/from-version-chaos-to-cicd-power?r=2pu5jb) | Why versioning matters and what CI/CD means in a Power BI context |
 | ✅ [Building Your Power BI CI/CD Pipeline – Part 1](https://fabricatedinsights.substack.com/p/building-your-power-bi-cicd-pipeline?r=2pu5jb) | Why you should use BPA to improve the quality and consistency of your model |
-| ✅ [Building Your Power BI CI/CD Pipeline – Part 2](https://fabricatedinsights.substack.com/p/building-your-power-bi-cicd-pipeline-660?r=2pu5jb) | Thoughts on: electing the right BPA rules for your project and adjusting severity levels—deciding how strictly best practices should be enforced |
+| ✅ [Building Your Power BI CI/CD Pipeline – Part 2](https://fabricatedinsights.substack.com/p/building-your-power-bi-cicd-pipeline-660?r=2pu5jb) | Thoughts on: selecting the right BPA rules for your project and adjusting severity levels—deciding how strictly best practices should be enforced |
 
 ---
 
@@ -40,9 +41,9 @@ Each branch represents a different scenario with growing complexity and value �
 |---------|--------|
 | ✅ [Part 1 – Run BPA with default ruleset](https://fabricatedinsights.substack.com/i/160480588/step-a-create-your-first-github-actions-workflow) | [`basic-scenario-1-default-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-1-default-bpa-ruleset) |
 | ✅ [Part 1 – Use a custom BPA rule](https://fabricatedinsights.substack.com/i/160480588/step-b-modify-your-first-github-actions-workflow) | [`basic-scenario-2-custom-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset) |
-| ✅ [Part 2 – Automating BPA with C# in Tabular Editor + GitHub Actions](https://fabricatedinsights.substack.com/p/automating-bpa-with-c-in-tabular) |  [`intermediate-scenario-1-bpa-macro-csharp`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/intermediate-scenario-1-bpa-macro-csharp)  |
-| ⏳ Part 3 – Pull request validation with GitHub Actions | _coming soon_ |
-| ⏳ Part 4 – Full Power BI CI/CD pipeline | _coming soon_ |
+| ✅ [Part 2 – Automating BPA with C# in Tabular Editor + GitHub Actions](https://fabricatedinsights.substack.com/p/automating-bpa-with-c-in-tabular) | [`intermediate-scenario-1-bpa-macro-csharp`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/intermediate-scenario-1-bpa-macro-csharp) |
+| ✅ [Part 3 – Making BPA Results Actionable with Automated PR Comments](https://fabricatedinsights.substack.com/p/making-bpa-results-actionable-with) | [`advanced-scenario-1-bpa-analysis-pr-comments`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-1-bpa-analysis-pr-comments) |
+| ✅ [Part 4 – Scaling Your CI/CD Pipeline Across Projects](link-to-part4) | [`advanced-scenario-2-central-repo`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-2-central-repo-setup) |
 
 ---
 
@@ -51,8 +52,14 @@ Each branch represents a different scenario with growing complexity and value �
 To test any scenario locally:
 
 1. Clone the repository:
+```bash
+git clone https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos.git
+```
 
 2. Switch to the scenario you want to follow:
+```bash
+git checkout basic-scenario-1-default-bpa-rules
+```
 
 3. Open in VS Code and review the `.pbip` project and GitHub Actions YAML file
 
@@ -63,23 +70,25 @@ To test any scenario locally:
 ## 🧰 Features in This Series
 
 ✅ Already covered:
-- Running **Tabular Editor’s BPA** with default & custom rulesets  
+- Running **Tabular Editor's BPA** with default & custom rulesets  
 - Using GitHub Actions to fail workflows based on BPA severity  
 - Adding rule-breaking DAX examples for testing
-- Consolidating BPA results into a CSV using a custom C# macro  
+- Consolidating BPA results into a CSV using a custom C# macro
+- **Analyzing BPA results with Python and posting structured PR comments**
+- **Categorizing violations by severity (Must Correct, Correct ASAP, Nice to Have)**
+- **Automatic PR labeling based on BPA status**
+- **Setting up a central repository for reusable workflows**
+- **Creating repository templates for standardized project setup**
+- **Conditional workflow execution based on PR content**
+- **Using CODEOWNERS for default approvers**
 
-🔜 Coming soon:
-- Parsing BPA output for better reporting
-- Using **Power BI Inspector** for visual best practice checks
-- **Auto-formatting DAX** 
-- Validating changes in **pull requests**
 
 ---
 
 ## 🙌 Feedback
 
 Have questions, suggestions, or ideas for new scenarios?  
-Feel free to [open an issue](https://github.com/your-org/powerbi-cicd-with-githubactions-demos/issues) or reach out on [LinkedIn](https://www.linkedin.com/in/danielgaborpatkos/).
+Feel free to [open an issue](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/issues) or reach out on [LinkedIn](https://www.linkedin.com/in/danielgaborpatkos/).
 
 ---
 
