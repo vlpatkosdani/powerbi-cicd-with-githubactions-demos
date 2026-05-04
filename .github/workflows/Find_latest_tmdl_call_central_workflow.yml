@@ -1,0 +1,65 @@
+name: Call BPA checker stored in central repo and pass TMDL location
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  find-latest-tmdl:
+    runs-on: ubuntu-latest
+    outputs:
+      tmdl_path: ${{ steps.find.outputs.tmdl_path }}
+    steps:
+      - name: Checkout PR branch (default behavior)
+        uses: actions/checkout@v3
+
+          
+      - name: Find latest modified .tmdl file
+        id: find
+        run: |
+          echo "🔍 Searching for database.tmdl files inside *.SemanticModel folders..."
+      
+          mapfile -t tmdl_files < <(find . -type f -path "*/.SemanticModel/definition/database.tmdl" -o -regex ".*\.SemanticModel/definition/database\.tmdl")
+      
+          if [ ${#tmdl_files[@]} -eq 0 ]; then
+            echo "❌ No .tmdl files found. Exiting."
+            exit 1
+          fi
+      
+          latest_file=""
+          latest_mtime=0
+      
+          for path in "${tmdl_files[@]}"; do
+            model_dir=$(dirname "$(dirname "$path")")
+            mtime=$(stat -c "%Y" "$model_dir")
+      
+            if (( mtime > latest_mtime )); then
+              latest_mtime=$mtime
+              latest_file=$path
+            fi
+          done
+      
+          echo "✅ Selected TMDL file: $latest_file"
+      
+          # Normalize path and remove pr_branch prefix
+          clean_path=$(echo "$latest_file" | sed 's|^\./||')  
+          trimmed_path="${clean_path#pr_branch/}"             
+      
+          # Convert to Windows-style path
+          win_path=$(echo "pr_repo\\$(echo "$trimmed_path" | sed 's|/|\\|g')")
+      
+          echo "🎯 Final relative TMDL path: $win_path"
+          echo "tmdl_path=$win_path" >> $GITHUB_OUTPUT
+        shell: bash
+
+
+  run-bpa:
+    needs: find-latest-tmdl
+    uses: YOUR-ORGANIZATION/YOUR-CENTRAL-WORKFLOW-REPO/.github/workflows/reusable-bpa-workflow-triggered-by-other-workflows.yml@main
+    with:
+      tmdl_path: ${{ needs.find-latest-tmdl.outputs.tmdl_path }}
+    secrets:
+      Central_Repo_PAT: ${{ secrets.Central_Repo_PAT }}

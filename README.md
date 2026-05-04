@@ -19,7 +19,7 @@ Each branch represents a different scenario with growing complexity and value �
 | ✅ | Basic Scenario 2 – Custom BPA Ruleset | [`basic-scenario-2-custom-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset) | Use a local JSON file with a custom BPA rule |
 | ✅ | Intermediate Scenario 1 – BPA via C# Macro with Consolidated Output | [`intermediate-scenario-1-bpa-macro-csharp`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/intermediate-scenario-1-bpa-macro-csharp) | Run BPA with a custom C# script to consolidate results into a CSV and support full custom rulesets |
 | ✅ | Advanced Scenario 1 – Automated BPA Analysis with PR Comments | [`advanced-scenario-1-bpa-analysis-pr-comments`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-1-bpa-analysis-pr-comments) | Analyze BPA results with Python and post structured comments directly on pull requests |
-| ⏳ | Advanced Scenario 2 – Full CI/CD Workflow | _coming soon_ | Combine validations, PR checks, formatting, and more |
+| ✅ | Advanced Scenario 2 – Scaling with Central Repository | [`advanced-scenario-2-central-repo`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-2-central-repo) | Set up a central repository for reusable workflows and scripts that can be called from multiple project repositories |
 
 ---
 
@@ -43,7 +43,7 @@ Each branch represents a different scenario with growing complexity and value �
 | ✅ [Part 1 – Use a custom BPA rule](https://fabricatedinsights.substack.com/i/160480588/step-b-modify-your-first-github-actions-workflow) | [`basic-scenario-2-custom-bpa-rules`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/basic-scenario-2-custom-bpa-ruleset) |
 | ✅ [Part 2 – Automating BPA with C# in Tabular Editor + GitHub Actions](https://fabricatedinsights.substack.com/p/automating-bpa-with-c-in-tabular) | [`intermediate-scenario-1-bpa-macro-csharp`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/intermediate-scenario-1-bpa-macro-csharp) |
 | ✅ [Part 3 – Making BPA Results Actionable with Automated PR Comments](https://fabricatedinsights.substack.com/p/making-bpa-results-actionable-with) | [`advanced-scenario-1-bpa-analysis-pr-comments`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-1-bpa-analysis-pr-comments) |
-| ⏳ Part 4 – Scaling Your CI/CD Pipeline Across Projects | _coming soon_ |
+| ✅ [Part 4 – Scaling Your CI/CD Pipeline Across Projects](https://fabricatedinsights.substack.com/p/scaling-your-power-bi-cicd-pipeline?r=2pu5jb) | [`advanced-scenario-2-central-repo`](https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos/tree/advanced-scenario-2-central-repo-setup) |
 
 ---
 
@@ -53,12 +53,12 @@ To test any scenario locally:
 
 1. Clone the repository:
 ```bash
-   git clone https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos.git
+git clone https://github.com/vlpatkosdani/powerbi-cicd-with-githubactions-demos.git
 ```
 
 2. Switch to the scenario you want to follow:
 ```bash
-   git checkout basic-scenario-1-default-bpa-rules
+git checkout basic-scenario-1-default-bpa-rules
 ```
 
 3. Open in VS Code and review the `.pbip` project and GitHub Actions YAML file
@@ -77,13 +77,11 @@ To test any scenario locally:
 - **Analyzing BPA results with Python and posting structured PR comments**
 - **Categorizing violations by severity (Must Correct, Correct ASAP, Nice to Have)**
 - **Automatic PR labeling based on BPA status**
+- **Setting up a central repository for reusable workflows**
+- **Creating repository templates for standardized project setup**
+- **Conditional workflow execution based on PR content**
+- **Using CODEOWNERS for default approvers**
 
-🔜 Coming soon:
-- Setting up a central repository for reusable workflows
-- Creating repository templates for standardized project setup
-- Conditional workflow execution based on PR content
-- Using **Power BI Inspector** for visual best practice checks
-- **Auto-formatting DAX**
 
 ---
 
